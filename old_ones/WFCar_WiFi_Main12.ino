@@ -138,36 +138,34 @@ void servo_cam_turn50_to_80(Servo servo, int amountofgrad)
 void grab_stuff (Servo servo_left, Servo servo_right) {
   int servonow_left=servo_left.read();
   int servonow_right=servo_right.read();
-  if (servonow_left < 2) {
-      for(pos = servonow_left; pos < 2; pos += 1)
+  if (servonow_left < 10) {
+      for(pos = servonow_left; pos < 10; pos += 1)
       {
         servo_left.write(pos);
         delay(10);
       }
   }
-  else if (servonow_left > 2) {
-        for(pos = servonow_left; pos > 2; pos -= 1)
+  else if (servonow_left > 10) {
+        for(pos = servonow_left; pos > 10; pos -= 1)
         {
           servo_left.write(pos);
           delay(10);
         }
   }
-    servo_right.writeMicroseconds(2500);
-  delay(400);
- // if (servonow_right < 175) {
-//    for(pos = servonow_right; pos < 175; pos += 1)
-//    {
-//      servo_right.write(pos);
-//      delay(10);
-//    } 
-//  }
-//  else if (servonow_right > 175) {
-//      for(pos = servonow_left; pos > 175; pos -= 1)
-//      {
-//        servo_right.write(pos);
-//        delay(10);
-//      }
-//  }
+  if (servonow_right < 175) {
+    for(pos = servonow_right; pos < 175; pos += 1)
+    {
+      servo_right.write(pos);
+      delay(10);
+    } 
+  }
+  else if (servonow_right > 175) {
+      for(pos = servonow_left; pos > 175; pos -= 1)
+      {
+        servo_right.write(pos);
+        delay(10);
+      }
+  }
 }
 void release_stuff (Servo servo_left, Servo servo_right){
   int servonow_left=servo_left.read();
@@ -186,8 +184,8 @@ void release_stuff (Servo servo_left, Servo servo_right){
           delay(10);
         }
   }
-  servo_right.writeMicroseconds(75);
-  delay(400);
+  servo_right.writeMicroseconds(100);
+  delay(600);
   // if (servonow_right < 10) {
   //   for(pos = servonow_right; pos < 10; pos += 1)
   // {
@@ -210,7 +208,7 @@ void Perimeter () {
 //  if (modemkey = 'e')
 //  {return;}
   int per_dist =  ultrasoundmode();
-          if (timesadvanced > 3) {
+          if (timesadvanced> 4) {
             back();
             delay(200);
             ostanovka();
@@ -223,27 +221,27 @@ void Perimeter () {
           }
           if (per_dist < 0) {
             back();
-            delay(300);
+            delay(200);
             ostanovka();
           } else if (per_dist<=3) {
             back();
             delay(70);
             ostanovka();
-            turnR();
-            delay(220);
+            turnL();
+            delay(250);
             ostanovka();
             advance();
-            delay(320);
+            delay(340);
             ostanovka();
           }  else if (per_dist>=9) {
             back();
             delay(70);
             ostanovka();
-            turnL();
-            delay(220);
+            turnR();
+            delay(250);
             ostanovka();
             advance();
-            delay(320);
+            delay(340);
             ostanovka();
           } else {
             timesadvanced += 1;
@@ -251,7 +249,7 @@ void Perimeter () {
             delay(400);
             ostanovka();
           }
-  //
+  //}
 }
 //Для объезда препятствий
 int ultrasoundmode() {
@@ -375,27 +373,25 @@ void loop() {
          //servo_right();
          modemkey=0;
          break;
-       case 'k': // camerupdown
+       case 'k':
         servoY6.attach(6);
-        delay(25);
+        delay(20);
         //servo_cam_turn50_to_80(servoY6, 50);
-        servoY6.writeMicroseconds(600);
-        delay(200);
         servoY6.detach();
         modemkey=0;
         break;
-       case 'i':  //camerdown
+       case 'i':  //MAYBE NOT WORKING?
          servoY6.attach(6);
-         delay(25);
+         delay(20);
          //servo_cam_turn90_to_50(servoY6, 50);
          servoY6.writeMicroseconds(150);
          delay(200);
          servoY6.detach();
          modemkey=0;
          break;
-       case 'm': // camerup
+       case 'm':
         servoY6.attach(6);
-        delay(25);
+        delay(20);
         //servo_cam_turn110_to_80(servoY6, 30);
         servoY6.writeMicroseconds(1000);
         delay(200);

@@ -24,16 +24,15 @@ Servo servoXleft_10;
 //Right manipulator
 Servo servoXright_11;
 //
-int grad, pos;
+int grad, pos, pin, amountofgrad;
 boolean camera = false;
 boolean perimeter = false;
 //ULTRASOUND
-int percycle;
-int timesadvanced;
 const int degree_array[13] = { 85, 88, 91, 94, 97, 100, 103, 104, 107, 110, 111, 112, 113 };
 //const int degree_array[13] = { 55, 60, 67, 72, 76, 84, 90, 97, 104, 112, 119, 127, 132 };
 //const int degree_array[13] = { 65, 65, 65, 65, 70, 85, 90, 95, 100, 105, 110, 115, 125 };
-//const int degree_array[13] = { 5, 15, 30, 45, 60, 75, 90, 105, 120, 135, 150, 160, 170 };
+//const int degree_array[13] = { 0, 15, 30, 45, 60, 75, 90, 105, 120, 135, 150, 160, 170 };
+//const int degree_array[13] = { 5, 30, 45, 60, 75, 90, 105, 120, 135, 150, 165, 180, 200 };
 //SPEED
 int minspeed = 160;
 int midspeed = 190;
@@ -106,153 +105,120 @@ void servo_cam_turn50_to_80(Servo servo, int amountofgrad)
 //    delay(10);
 //  }
 //}
-//void servo_cam_turn80_to_110(Servo servo, int amountofgrad)
-//{
-//  int servonow = 80;
-//  for (grad = servonow; grad <= amountofgrad; grad+=1)
-//  {
-//    servo.write(servonow);
-//    delay(10);
-//  }
-//}
+void servo_cam_turn80_to_110(Servo servo, int amountofgrad)
+{
+  int servonow = 80;
+  for (grad = servonow; grad <= amountofgrad; grad+=1)
+  {
+    servo.write(servonow);
+    delay(10);
+  }
+}
+void servo_cam_turn90_to_50(Servo servo, int amountofgrad)
+{
+  int servonow = 90;
+  for (grad = servonow; grad <= amountofgrad; grad-=1)
+  {
+    servo.write(servonow);
+    delay(10);
+  }
+}
+void servo_cam_turn110_to_80(Servo servo, int amountofgrad)
+{
+    int servonow = 110;
+    for (grad = servonow; grad >= amountofgrad; grad-=1)
+    {
+      servo.write(servonow);
+      delay(10);
+    }
+}
+
 //For digital servo
-//void servo_9000(Servo servo, int amountofgrad)
-//{
-//  int servonow=servo.read();
-//  if (servonow < amountofgrad) {
-//  for (grad = servonow; grad < amountofgrad; grad+=1)
-//  {
-//    servo.write(servonow);
-//    delay(15);
-//  }
-//  }
-//  else {
-//      for (grad = servonow; grad > amountofgrad; grad-=1)
-//      {
-//        servo.write(servonow);
-//        delay(15);
-//      }
-//  }
-//}
+void servo_9000(Servo servo, int amountofgrad)
+{
+  int servonow=servo.read();
+  if (servonow < amountofgrad) {
+  for (grad = servonow; grad < amountofgrad; grad+=1)
+  {
+    servo.write(servonow);
+    delay(15);
+  }
+  }
+  else {
+      for (grad = servonow; grad > amountofgrad; grad-=1)
+      {
+        servo.write(servonow);
+        delay(15);
+      }
+  }
+}
 // 130 left, 30 right
 void grab_stuff (Servo servo_left, Servo servo_right) {
   int servonow_left=servo_left.read();
   int servonow_right=servo_right.read();
-  if (servonow_left < 2) {
-      for(pos = servonow_left; pos < 2; pos += 1)
+  if (servonow_left < 50) {
+      for(pos = servonow_left; pos < 50; pos += 1)
       {
         servo_left.write(pos);
         delay(10);
       }
   }
-  else if (servonow_left > 2) {
-        for(pos = servonow_left; pos > 2; pos -= 1)
+  else if (servonow_left > 50) {
+        for(pos = servonow_left; pos > 50; pos -= 1)
         {
           servo_left.write(pos);
           delay(10);
         }
   }
-    servo_right.writeMicroseconds(2500);
-  delay(400);
- // if (servonow_right < 175) {
-//    for(pos = servonow_right; pos < 175; pos += 1)
-//    {
-//      servo_right.write(pos);
-//      delay(10);
-//    } 
-//  }
-//  else if (servonow_right > 175) {
-//      for(pos = servonow_left; pos > 175; pos -= 1)
-//      {
-//        servo_right.write(pos);
-//        delay(10);
-//      }
-//  }
+  if (servonow_right < 175) {
+    for(pos = servonow_right; pos < 175; pos += 1)
+    {
+      servo_right.write(pos);
+      delay(10);
+    } 
+  }
+  else if (servonow_right > 175) {
+      for(pos = servonow_left; pos > 175; pos -= 1)
+      {
+        servo_right.write(pos);
+        delay(10);
+      }
+  }
 }
 void release_stuff (Servo servo_left, Servo servo_right){
   int servonow_left=servo_left.read();
   int servonow_right=servo_right.read();
-  if (servonow_left < 170) {
-      for(pos = servonow_left; pos < 170; pos += 1)
+  if (servonow_left < 120) {
+      for(pos = servonow_left; pos < 120; pos += 1)
     {
       servo_left.write(pos);
       delay(10);
     }
   }
-  else if (servonow_left > 170) {
-        for(pos = servonow_left; pos > 170; pos -= 1)
+  else if (servonow_left > 120) {
+        for(pos = servonow_left; pos > 120; pos -= 1)
         {
           servo_left.write(pos);
           delay(10);
         }
   }
-  servo_right.writeMicroseconds(75);
-  delay(400);
-  // if (servonow_right < 10) {
-  //   for(pos = servonow_right; pos < 10; pos += 1)
-  // {
-  //   servo_right.write(pos);
-  //   delay(10);
-  // } 
-  // }
-  // else if (servonow_right > 10) {
-  //     for(pos = servonow_left; pos > 10; pos -= 1)
-  //     {
-  //       servo_right.write(pos);
-  //       delay(10);
-  //     }
-  // }
+  
+  if (servonow_right < 10) {
+    for(pos = servonow_right; pos < 10; pos += 1)
+  {
+    servo_right.write(pos);
+    delay(10);
+  } 
+  }
+  else if (servonow_right > 10) {
+      for(pos = servonow_left; pos > 10; pos -= 1)
+      {
+        servo_right.write(pos);
+        delay(10);
+      }
+  }
 }
 
-void Perimeter () {
-//  if(Serial.available()) {
-//  modemkey = Serial.read();
-//  if (modemkey = 'e')
-//  {return;}
-  int per_dist =  ultrasoundmode();
-          if (timesadvanced > 3) {
-            back();
-            delay(200);
-            ostanovka();
-            turnL();
-            delay(350);
-            ostanovka();
-            advance();
-            delay(330);
-            ostanovka();
-          }
-          if (per_dist < 0) {
-            back();
-            delay(300);
-            ostanovka();
-          } else if (per_dist<=3) {
-            back();
-            delay(70);
-            ostanovka();
-            turnR();
-            delay(220);
-            ostanovka();
-            advance();
-            delay(320);
-            ostanovka();
-          }  else if (per_dist>=9) {
-            back();
-            delay(70);
-            ostanovka();
-            turnL();
-            delay(220);
-            ostanovka();
-            advance();
-            delay(320);
-            ostanovka();
-          } else {
-            timesadvanced += 1;
-            advance();
-            delay(400);
-            ostanovka();
-          }
-  //
-}
 //Для объезда препятствий
 int ultrasoundmode() {
   int servoposition = 0;
@@ -279,7 +245,7 @@ int ultrasoundmode() {
     }
   }
   // Если расстояние меньше минимально допустимого, присваиваем -1, т.е. задний ход
-  if (registeredmaxdistance < 12)
+  if (registeredmaxdistance < 3)
   {
     maxarray_index = -1;
   }
@@ -290,13 +256,11 @@ int ultrasoundmode() {
 void setup() {
   //echo first, trig second
   Dist.begin(9,8);
-  //SERVO SETUP
-  //FORMER ATTACH AT SETUP
-  //servoX.attach(11);
-//  servoY6.attach(6);
-//  servoXleft_10.attach(10);
-//  servoXright_11.attach(4);
-  //FORMER CENTER POSITIONING AT SETUP
+  //Servo setup
+  servoX.attach(11);
+  servoY6.attach(6);
+  servoXleft_10.attach(10);
+  servoXright_11.attach(4);
   //servoX.write(95);
   //servoY6.write(90);
 //  servoXleft_10.write(60);
@@ -340,103 +304,104 @@ void loop() {
   //Perimeter routine
 
   if(Serial.available()) {
-    timesadvanced = 0;
     modemkey = Serial.read();
-    switch(modemkey) {
-      case 'a':
-         currentspeed = midspeed;
-         advance();
-         //servoX.write(90);
-         modemkey=0;
-         break;   
-       case 'b':
-         //servoX.write(150);
-         back();
-         modemkey=0;
-         break;     
-       case 'c':
-         turnL();
-         modemkey=0;
-         break;
-       case 'd':
-        turnR();
-        modemkey=0;
-         break; 
-       case 'e':
-        ostanovka();
-        modemkey=0;
-         break;  
-       case 'j': 
-         currentspeed = maxspeed;
-         advance();
-         modemkey=0;
-         break;
-       case 'l': 
-         //servo_right();
-         modemkey=0;
-         break;
-       case 'k': // camerupdown
-        servoY6.attach(6);
-        delay(25);
-        //servo_cam_turn50_to_80(servoY6, 50);
-        servoY6.writeMicroseconds(600);
-        delay(200);
-        servoY6.detach();
-        modemkey=0;
-        break;
-       case 'i':  //camerdown
-         servoY6.attach(6);
-         delay(25);
-         //servo_cam_turn90_to_50(servoY6, 50);
-         servoY6.writeMicroseconds(150);
-         delay(200);
-         servoY6.detach();
-         modemkey=0;
-         break;
-       case 'm': // camerup
-        servoY6.attach(6);
-        delay(25);
-        //servo_cam_turn110_to_80(servoY6, 30);
-        servoY6.writeMicroseconds(1000);
-        delay(200);
-        servoY6.detach();
-        modemkey=0;
-        break;
-       case 'n':
-         servoXright_11.attach(4);
-         release_stuff(servoXleft_10, servoXright_11);
-         servoXleft_10.detach();
-         servoXright_11.detach();
-         modemkey=0;
-         break;
-       case 'g':
-         servoXleft_10.attach(10);
-         servoXright_11.attach(4);
-         grab_stuff(servoXleft_10, servoXright_11);
-         servoXright_11.detach();
-         modemkey=0;
-         break;
-       case 'x':
-         perimeter = true;
-          if (perimeter) {
-            servoX.attach(11);
-            delay(15);
-  //        distance = Dist.getDistanceCentimeter();
-  //        if(distance<=4 & distance>1) {
-  //          back();
-  //          delay(90);
-  //          ostanovka();
-  //          distance=0;
-  //        }
-            timesadvanced = 0;
-            for (percycle = 0; percycle <= 4; percycle += 1) {
-              Perimeter();
-            }
-            perimeter = false;
-            servoX.detach();
-          }
+  switch(modemkey) {
+    case 'a':
+       currentspeed = midspeed;
+       advance();
+       //servoX.write(90);
        modemkey=0;
+       break;   
+     case 'b':
+       //servoX.write(150);
+       back();
+       modemkey=0;
+       break;     
+     case 'c':
+       turnL();
+       modemkey=0;
+       break;
+     case 'd':
+      turnR();
+      modemkey=0;
+       break; 
+     case 'e':
+      ostanovka();
+      modemkey=0;
+       break;  
+     case 'j': 
+       currentspeed = maxspeed;
+       advance();
+       modemkey=0;
+       break;
+     case 'l': 
+       //servo_right();
+       modemkey=0;
+       break;
+     case 'k': 
+      servo_cam_turn50_to_80(servoY6, 50);
+      modemkey=0;
       break;
-      }
+     case 'i':  //MAYBE NOT WORKING?
+       //servo_cam_turn90_to_50(servoY6, 50);
+       servoY6.writeMicroseconds(100);
+       modemkey=0;
+       break;
+     case 'm':
+      //servo_cam_turn110_to_80(servoY6, 30);
+      servoY6.writeMicroseconds(1000);
+      modemkey=0;
+      break;
+     case 'n':
+       release_stuff(servoXleft_10, servoXright_11);
+       modemkey=0;
+       break;
+     case 'g':
+       grab_stuff(servoXleft_10, servoXright_11);
+       modemkey=0;
+       break;
+     case 'x':
+       perimeter = true;
+        if (perimeter) {
+//        distance = Dist.getDistanceCentimeter();
+//        if(distance<=4 & distance>1) {
+//          back();
+//          delay(90);
+//          ostanovka();
+//          distance=0;
+//        } 
+      int per_dist =  ultrasoundmode();
+      if (per_dist < 0) {
+        back();
+        delay(250);
+        ostanovka();
+      } else if (per_dist<=4) {
+        back();
+        delay(100);
+        turnL();
+        delay(200);
+        ostanovka();
+        advance();
+        delay(200);
+        ostanovka();
+      }  else if (per_dist>=9) {
+        back();
+        delay(100);
+        turnR();
+        delay(200);
+        ostanovka();
+        advance();
+        delay(200);
+        ostanovka();
+      } else {
+        advance();
+        delay(300);
+        ostanovka();
+      } 
+      perimeter = false;
+     }
+     modemkey=0;
+    break;
+    }
   }
  }
